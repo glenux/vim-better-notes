@@ -1140,7 +1140,7 @@ function! xolox#notes#highlight_names(force) " {{{3
     if hlexists('notesName')
       syntax clear notesName
     endif
-    let pattern = '\%(' . escape(join(titles, '\|'), '/') . '\)'
+    let pattern = '\%(' . escape(s:note_name_pattern(titles, 3), '/') . '\)'
     if g:notes_word_boundaries
       let pattern = '\<' . pattern . '\>'
     endif
@@ -1153,6 +1153,78 @@ endfunction
 function! s:words_to_pattern(words)
   " Quote regex meta characters, enable matching of hard wrapped words.
   return substitute(xolox#misc#escape#pattern(a:words), '\s\+', '\\_s\\+', 'g')
+endfunction
+
+" Build one syntax pattern from the escaped, longest-first title patterns.
+" Sharing prefixes avoids testing the same text for every title during redraw.
+function! s:note_name_pattern(patterns, depth) abort
+  if len(a:patterns) <= 10
+    return join(a:patterns, '\|')
+  endif
+
+  let rows = []
+  for pattern in a:patterns
+    " Keep escaped literals and the whitespace pattern indivisible.
+    let atoms = split(pattern, '\%(\\_s\\+\|\\.\|.\)\zs')
+    if index(atoms, '\n') >= 0
+      " A literal newline can overlap with the whitespace pattern.
+      return join(a:patterns, '\|')
+    endif
+    call add(rows, atoms)
+  endfor
+  return s:note_name_branches(rows, 0, a:depth)
+endfunction
+
+" Emit the pattern for the remaining suffixes, starting at atom {start}.
+" A shared prefix costs no depth; only branching consumes the budget.
+" Keep small groups and groups at the depth limit as flat alternatives.
+function! s:note_name_branches(rows, start, depth) abort
+  if len(a:rows) == 1
+    return join(a:rows[0][a:start :], '')
+  endif
+  let pos = a:start
+  while pos < len(a:rows[0])
+    let atom = a:rows[0][pos]
+    if !empty(filter(copy(a:rows), 'get(v:val, pos, "") !=# atom'))
+      break
+    endif
+    let pos += 1
+  endwhile
+  let prefix = pos == a:start ? '' : join(a:rows[0][a:start : pos - 1], '')
+
+  if a:depth == 0 || len(a:rows) <= 10
+    let tails = map(copy(a:rows), 'join(v:val[pos :], "")')
+    return prefix . '\%(' . join(tails, '\|') . '\)'
+  endif
+
+  let branches = []
+  let groups = {}
+  let terminal = 0
+  for row in a:rows
+    let atom = get(row, pos, '')
+    if empty(atom)
+      let terminal = 1
+    elseif atom ==# '\_s\+' || atom =~# '^\%(\\\)\?[!-~]$'
+      let key = tolower(atom)
+      if !has_key(groups, key)
+        let groups[key] = []
+        call add(branches, [atom, groups[key]])
+      endif
+      call add(groups[key], row)
+    else
+      " Don't reorder an ASCII branch across a non-ASCII alternative.
+      let groups = {}
+      call add(branches, join(row[pos :], ''))
+    endif
+  endfor
+
+  call map(branches, 'type(v:val) == type("") ? v:val'
+        \ . ' : v:val[0] . s:note_name_branches(v:val[1], pos + 1, a:depth - 1)')
+  if terminal
+    " Try longer titles before the title that ends at this prefix.
+    call add(branches, '')
+  endif
+  return prefix . (len(branches) == 1 ? branches[0] : '\%(' . join(branches, '\|') . '\)')
 endfunction
 
 function! s:sort_longest_to_shortest(a, b)
