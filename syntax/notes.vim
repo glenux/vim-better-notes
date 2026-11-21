@@ -104,7 +104,8 @@ endif
 syntax match notesEmailAddr /\<\w[^@ \t\r]*\w@\w[^@ \t\r]\+\w\>/
 syntax cluster notesInline add=notesEmailAddr
 highlight def link notesEmailAddr notesSubtleURL
-syntax match notesUnixPath /\k\@<![\/~]\S\+\(\/\|[^ [:punct:]]\)/
+" syntax match notesUnixPath /\k\@<![\/~]\S\+\(\/\|[^ [:punct:]]\)/ " False: highlights e.g. ~~ and following word (used as markdown strike-through)
+syntax match notesUnixPath /\k\@<!\(\/\|\~\/\)\S\+\(\/\|[^ [:punct:]]\)/
 syntax cluster notesInline add=notesUnixPath
 highlight def link notesUnixPath Directory
 syntax match notesPathLnum /:\d\+/ contained containedin=notesUnixPath
@@ -118,7 +119,7 @@ syntax match notesTodo /\<TODO\>/
 syntax match notesXXX /\<XXX\>/
 syntax match notesFixMe /\<FIXME\>/
 syntax match notesInProgress /\<\(CURRENT\|INPROGRESS\|STARTED\|WIP\)\>/
-syntax match notesDoneItem /^\(\s\+\).*\<DONE\>.*\(\n\1\s.*\)*/ contains=@notesInline
+syntax match notesDoneItem /^\(\s*\).*\<DONE\>.*\(\n\1\s.*\)*/ contains=@notesInline
 syntax match notesDoneMarker /\<DONE\>/ containedin=notesDoneItem
 highlight def link notesTodo WarningMsg
 highlight def link notesXXX WarningMsg
@@ -126,6 +127,12 @@ highlight def link notesFixMe WarningMsg
 highlight def link notesDoneItem Comment
 highlight def link notesDoneMarker Question
 highlight def link notesInProgress Directory
+" Added by AlexanderZeitler on 2019-08-05
+syntax match notesDeletedItem /^\(\s*\).*\<\(DELETED\|DEL\|REMOVED\)\>.*\(\n\1\s.*\)*/ contains=@notesInline
+syntax match notesDeletedMarker /\<\(DELETED\|DEL\|REMOVED\)\>/ containedin=notesDeletedItem
+highlight def link notesDeletedItem Comment
+highlight def link notesDeletedMarker ErrorMsg
+
 
 " Highlight Vim command names in :this notation. {{{2
 syntax match notesVimCmd /\w\@<!:\w\+\(!\|\>\)/ contains=ALLBUT,@Spell
