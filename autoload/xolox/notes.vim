@@ -1153,7 +1153,9 @@ function! xolox#notes#highlight_names(force) " {{{3
     if g:notes_word_boundaries
       let pattern = '\<' . pattern . '\>'
     endif
-    execute 'syntax match notesName /\c\%>1l' . pattern . '/'
+    " The legacy regexp engine can miss multibyte titles; select automatically here.
+    let engine = exists('+regexpengine') ? '\%#=0' : ''
+    execute 'syntax match notesName /' . engine . '\c\%>1l' . pattern . '/'
     let b:notes_names_last_highlighted = localtime()
     call xolox#misc#timer#stop("notes.vim %s: Highlighted note names in %s.", g:xolox#notes#version, starttime)
   endif
