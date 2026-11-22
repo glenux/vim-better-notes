@@ -91,6 +91,13 @@ Enabled by default (`1`). Set it to `0` in your vimrc to disable only the
 
     let g:notes_map_em_dash = 0
 
+### The `g:notes_map_ruler` option
+
+Enabled by default (`1`). Set it to `0` in your vimrc to disable only the
+`***` insert-mode mapping in notes:
+
+    let g:notes_map_ruler = 0
+
 ### The `g:notes_ruler_text` option
 
 The text of the ruler line inserted when you type `***` in quick succession. It defaults to three asterisks separated by spaces, center aligned to the text width.
@@ -311,7 +318,7 @@ The following key mappings are defined inside notes.
  * `->` becomes `→`
  * `<-` becomes `←`
  * the bullets `*`, `-` and `+` become `•`
- * the three characters `***` in insert mode in quick succession insert a horizontal ruler delimited by empty lines
+ * Typing `***` in quick succession inserts a horizontal ruler delimited by empty lines (see [`g:notes_map_ruler`](#the-gnotes_map_ruler-option))
  * `Tab` and `Alt-Right` increase indentation of list items (works on the current line and selected lines)
  * `Shift-Tab` and `Alt-Left` decrease indentation of list items
  * `Enter` on a line with only a list bullet removes the bullet and starts a new line below the current line

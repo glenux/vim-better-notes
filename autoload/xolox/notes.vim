@@ -988,6 +988,20 @@ endfunction
 
 " Functions called by the file type plug-in and syntax script. {{{2
 
+function! xolox#notes#insert_ruler() " {{{3
+  " Insert horizontal ruler delimited by empty lines.
+  let lnum = line('.')
+  if getline(lnum) =~ '\S' && getline(lnum + 1) !~ '\S'
+    let lnum += 1
+  endif
+  let line1 = prevnonblank(lnum)
+  let line2 = nextnonblank(lnum)
+  if line1 < lnum && line2 > lnum
+    execute printf('%i,%idelete _', line1 + 1, line2 - 1)
+  endif
+  call append(line1, ['', g:notes_ruler_text, ''])
+endfunction
+
 function! xolox#notes#insert_quote(chr) " {{{3
   " XXX When I pass the below string constants as arguments from the file type
   " plug-in the resulting strings contain mojibake (UTF-8 interpreted as

@@ -28,6 +28,7 @@ Contents ~
   19. The |g:notes_conceal_url| option
   20. The |g:notes_new_note_template| option
   21. The |g:notes_map_em_dash| option
+  22. The |g:notes_map_ruler| option
  4. Commands                                                   |notes-commands|
   1. The |:Note| command
   2. The |:NoteFromSelectedText| command
@@ -400,6 +401,15 @@ insert-mode mapping in notes:
   let g:notes_map_em_dash = 0
 <
 
+-------------------------------------------------------------------------------
+The *g:notes_map_ruler* option
+
+Enabled by default (1). Set it to 0 in your vimrc to disable only the '***'
+insert-mode mapping in notes:
+>
+  let g:notes_map_ruler = 0
+<
+
 ===============================================================================
                                                                *notes-commands*
 Commands ~
@@ -658,8 +668,8 @@ Insert mode mappings ~
 - '->' becomes '→'
 - '<-' becomes '←'
 - the bullets '*', '-' and '+' become '•'
-- the three characters '***' in insert mode in quick succession insert a
-  horizontal ruler delimited by empty lines
+- Typing '***' in quick succession inserts a horizontal ruler delimited by
+  empty lines (see |g:notes_map_ruler|)
 - 'Tab' and 'Alt-Right' increase indentation of list items (works on the
   current line and selected lines)
 - 'Shift-Tab' and 'Alt-Left' decrease indentation of list items
