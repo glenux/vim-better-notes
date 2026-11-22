@@ -169,8 +169,9 @@ syntax match notesCodeStart /```\w*/
 syntax match notesCodeEnd /```\W/
 syntax match notesCodeStart /{{[{]\w*/
 syntax match notesCodeEnd /}}[}]/
-highlight def link notesCodeStart Special
-highlight def link notesCodeEnd Special
+let s:fence_highlight = get(g:, 'notes_highlight_code_fences', 0) ? 'Special' : 'Ignore'
+execute 'highlight def link notesCodeStart' s:fence_highlight
+execute 'highlight def link notesCodeEnd' s:fence_highlight
 call xolox#notes#highlight_sources(1)
 
 " Hide mode line at end of file. {{{2

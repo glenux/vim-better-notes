@@ -148,6 +148,14 @@ By default the backticks that mark inline code snippets and the curly quotes tha
 
     This is a sentence with an `inline code` fragment.
 
+### The `g:notes_highlight_code_fences` option
+
+By default (`0`), visible code block delimiters use the `Ignore` highlight group. Set this to `1` in your [vimrc script][vimrc] to use `Special` instead:
+
+    let g:notes_highlight_code_fences = 1
+
+This affects only the styling of visible block delimiters, not whether they are hidden. Hiding is controlled separately by `g:notes_conceal_code`.
+
 ### The `g:notes_conceal_italic` option
 
 By default the underscores that mark italic text are hidden when your version of Vim supports concealing of text. By setting this option to zero you stop vim-notes from hiding those underscores. In the following example, the underscores would be visible in the editor when this option is set to zero:

@@ -23,12 +23,13 @@ Contents ~
   14. The |g:notes_tagsindex| option
   15. The |g:notes_markdown_program| option
   16. The |g:notes_conceal_code| option
-  17. The |g:notes_conceal_italic| option
-  18. The |g:notes_conceal_bold| option
-  19. The |g:notes_conceal_url| option
-  20. The |g:notes_new_note_template| option
-  21. The |g:notes_map_em_dash| option
-  22. The |g:notes_map_ruler| option
+  17. The |g:notes_highlight_code_fences| option
+  18. The |g:notes_conceal_italic| option
+  19. The |g:notes_conceal_bold| option
+  20. The |g:notes_conceal_url| option
+  21. The |g:notes_new_note_template| option
+  22. The |g:notes_map_em_dash| option
+  23. The |g:notes_map_ruler| option
  4. Commands                                                   |notes-commands|
   1. The |:Note| command
   2. The |:NoteFromSelectedText| command
@@ -349,6 +350,17 @@ in the editor when this option is set to zero:
 >
   This is a sentence with an `inline code` fragment.
 <
+-------------------------------------------------------------------------------
+The *g:notes_highlight_code_fences* option
+
+By default (0), visible code block delimiters use the Ignore highlight group.
+Set this to 1 in your vimrc to use Special instead:
+>
+  let g:notes_highlight_code_fences = 1
+<
+This changes only the style of visible block delimiters, not whether they are
+hidden. Hiding is controlled separately by |g:notes_conceal_code|.
+
 -------------------------------------------------------------------------------
 The *g:notes_conceal_italic* option
 
