@@ -152,6 +152,14 @@ By default URL schemes (text fragments like `http://`) are hidden when your vers
 
     You can find the vim-notes plug-in at https://github.com/xolox/vim-notes.
 
+### The `g:notes_new_note_template` option
+
+This option controls the template used when creating a new note:
+
+- If unset, vim-notes uses `$VIM_NOTES_TEMPLATE` when it is nonempty, or the bundled `New note` template otherwise.
+- Set it to `''` to create notes without a template. `:Note` without a title starts with just `New note` and leaves the buffer unmodified.
+- Set it to a nonempty file path to use that template. If the selected template cannot be read, vim-notes reports an error and stops initializing the new note; it does not fall back to another template or to a note without one.
+
 ## Commands
 
 To edit one of your existing notes (or create a new one) you can use Vim commands such as [:edit][edit], [:split][split] and [:tabedit][tabedit] with a filename that starts with *note:* followed by (part of) the title of one of your notes, e.g.:
@@ -162,7 +170,7 @@ This shortcut also works from the command line:
 
     $ gvim note:todo
 
-When you don't follow *note:* with anything a new note is created like when you execute `:Note` without any arguments. If the *note:* shortcut is used from the command line, the environment variable `$VIM_NOTES_TEMPLATE` can be set to the filename of a template for new notes (this will override the default template).
+When you don't follow *note:* with anything a new note is created like when you execute `:Note` without any arguments. See [the `g:notes_new_note_template` option](#the-gnotes_new_note_template-option) for how the template is selected, including when Vim is launched with `$VIM_NOTES_TEMPLATE`.
 
 ### The `:Note` command
 
