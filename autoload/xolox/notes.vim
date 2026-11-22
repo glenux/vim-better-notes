@@ -148,7 +148,8 @@ function! xolox#notes#edit(bang, title) abort " {{{1
   " Edit an existing note or create a new one with the :Note command.
   let starttime = xolox#misc#timer#start()
   let title = xolox#misc#str#trim(a:title)
-  if title != ''
+  let has_title = title != ''
+  if has_title
     let fname = xolox#notes#select(title)
     if fname != ''
       call xolox#misc#msg#debug("notes.vim %s: Editing existing note: %s", g:xolox#notes#version, fname)
@@ -166,17 +167,23 @@ function! xolox#notes#edit(bang, title) abort " {{{1
   " At this point we're dealing with a new note.
   let fname = xolox#notes#title_to_fname(title)
   noautocmd execute 'edit' . a:bang fnameescape(fname)
-  if line('$') == 1 && getline(1) == ''
-    if g:notes_new_note_template != ''
-      execute 'silent read' fnameescape(g:notes_new_note_template)
+  let empty_buffer = line('$') == 1 && getline(1) == ''
+  if empty_buffer && g:notes_new_note_template != ''
+    execute 'silent read' fnameescape(g:notes_new_note_template)
+    " In Ex mode :read can remove the initial empty line itself.
+    if line('$') > 1 && line("']") == line('$') && getline(1) == ''
+      1delete _
     endif
-    1delete
     if !xolox#notes#unicode_enabled()
       call s:transcode_utf8_latin1()
     endif
     setlocal nomodified
+  elseif empty_buffer && !has_title
+    let was_modified = &l:modified
+    call setline(1, title)
+    let &l:modified = was_modified
   endif
-  if title != 'New note'
+  if has_title
     call setline(1, title)
   endif
   call xolox#notes#set_filetype()
