@@ -84,6 +84,13 @@ By default the notes plug-in automatically performs several substitutions on the
 
     :let g:notes_smart_quotes = 0
 
+### The `g:notes_map_em_dash` option
+
+Enabled by default (`1`). Set it to `0` in your vimrc to disable only the
+`--` insert-mode mapping in notes:
+
+    let g:notes_map_em_dash = 0
+
 ### The `g:notes_ruler_text` option
 
 The text of the ruler line inserted when you type `***` in quick succession. It defaults to three asterisks separated by spaces, center aligned to the text width.
@@ -300,7 +307,7 @@ The following key mappings are defined inside notes.
  * `@` automatically triggers tag completion
  * `'` becomes `‘` or `’` depending on where you type it
  * `"` becomes `“` or `”` (same goes for these)
- * `--` becomes `—`
+ * `--` becomes `—` outside code blocks when smart substitutions and Unicode are enabled (see [`g:notes_map_em_dash`](#the-gnotes_map_em_dash-option))
  * `->` becomes `→`
  * `<-` becomes `←`
  * the bullets `*`, `-` and `+` become `•`

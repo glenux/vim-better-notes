@@ -1003,6 +1003,11 @@ function! xolox#notes#insert_quote(chr) " {{{3
   return a:chr
 endfunction
 
+function! xolox#notes#insert_em_dash() " {{{3
+  " Change double-dash (--) to em-dash (—) as it is typed.
+  return (g:notes_smart_quotes && xolox#notes#unicode_enabled() && !xolox#notes#currently_inside_snippet()) ? '—' : '--'
+endfunction
+
 function! xolox#notes#insert_left_arrow() " {{{3
   " Change ASCII left arrow (<-) to Unicode arrow (←) as it is typed.
   return (g:notes_smart_quotes && xolox#notes#unicode_enabled() && !xolox#notes#currently_inside_snippet()) ? '←' : "<-"

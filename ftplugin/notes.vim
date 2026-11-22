@@ -58,6 +58,12 @@ let b:undo_ftplugin .= ' | execute "iunmap <buffer> @"'
 " for this we have to change the (unfortunately) global option &completeopt.
 set completeopt+=longest
 
+" Change double-dash to em-dash as it is typed. {{{1
+if get(g:, 'notes_map_em_dash', 1)
+  inoremap <buffer> <expr> -- xolox#notes#insert_em_dash()
+  let b:undo_ftplugin .= ' | execute "iunmap <buffer> --"'
+endif
+
 " Change plain quotes to curly quotes as they're typed. {{{1
 inoremap <buffer> <expr> ' xolox#notes#insert_quote("'")
 inoremap <buffer> <expr> " xolox#notes#insert_quote('"')
